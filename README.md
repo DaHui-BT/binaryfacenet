@@ -2,6 +2,7 @@
 
 this implement on face recognise is base on inception block, the train mode is binary classfication
 
+this model has changed the triple training way to binary classfication way.
 
 ## Usage
 
