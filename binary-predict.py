@@ -4,10 +4,11 @@ from model import FaceNet
 from PIL import Image
 import os
 
+from tools.preprocess import preprocess_image
 
 def extract_face_embedding(img1_path: str, img2_path: str, mtcnn: MTCNN, model: FaceNet):
-  img1 = Image.open(img1_path)
-  img2 = Image.open(img2_path)
+  img1 = preprocess_image(img1_path)
+  img2 = preprocess_image(img2_path)
   img1_cropped = mtcnn(img1).to(device=model.device)
   img2_cropped = mtcnn(img2).to(device=model.device)
   assert img1_cropped is not None and img2_cropped is not None, 'not face has been detected!'
@@ -33,10 +34,10 @@ if __name__ == '__main__':
   if os.path.isfile(weight):
     model.load_state_dict(torch.load(weight))
     
-  # img1_path = 'imgs/Aaron_Eckhart_0001.jpg'
-  # img2_path = 'imgs/Aaron_Sorkin_0001.jpg'
-  img1_path = 'imgs/Aaron_Sorkin_0001.jpg'
-  img2_path = 'imgs/Aaron_Sorkin_0002.jpg'
+  img1_path = 'imgs/Aaron_Eckhart_0001.jpg'
+  img2_path = 'imgs/Aaron_Sorkin_0001.jpg'
+  # img1_path = 'imgs/Aaron_Sorkin_0001.jpg'
+  # img2_path = 'imgs/Aaron_Sorkin_0002.jpg'
   is_same, similarity_score = verify(img1_path, img2_path, mtcnn, model)
 
   print(f'Are the images of the same person? {is_same}')

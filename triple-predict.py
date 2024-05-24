@@ -5,9 +5,10 @@ from model import InceptionResnet
 from PIL import Image
 import os
 
+from tools.preprocess import preprocess_image
 
 def extract_face_embedding(img_path: str, mtcnn: MTCNN, model: InceptionResnet):
-    img = Image.open(img_path)
+    img = preprocess_image(img_path)
     img_cropped = mtcnn(img)
     assert img_cropped is not None, 'not face has been detected!'
     
@@ -37,10 +38,10 @@ if __name__ == '__main__':
   if os.path.isfile(weight):
     model.load_state_dict(torch.load(weight), strict=True)
     
-  img1_path = 'imgs/Aaron_Eckhart_0001.jpg'
-  img2_path = 'imgs/Aaron_Sorkin_0001.jpg'
-  # img1_path = 'imgs/Aaron_Sorkin_0001.jpg'
-  # img2_path = 'imgs/Aaron_Sorkin_0002.jpg'
+  # img1_path = 'imgs/Aaron_Eckhart_0001.jpg'
+  # img2_path = 'imgs/Aaron_Sorkin_0001.jpg'
+  img1_path = 'imgs/Aaron_Sorkin_0001.jpg'
+  img2_path = 'imgs/Aaron_Sorkin_0002.jpg'
   is_same, similarity_score = verify(img1_path, img2_path, mtcnn, model)
 
   print(f'Are the images of the same person? {is_same}')

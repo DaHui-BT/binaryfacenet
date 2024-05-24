@@ -3,7 +3,24 @@ from PIL import Image
 from tqdm import tqdm
 import torch
 import numpy as np
+import cv2
 from facenet_pytorch import MTCNN
+
+
+def preprocess_image(path: str) -> Image:
+  image = np.array(Image.open(path))
+
+  gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+  equalized_image = cv2.equalizeHist(gray_image)
+
+  clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+  clahe_image = clahe.apply(equalized_image)
+
+  processed_image = cv2.cvtColor(clahe_image, cv2.COLOR_GRAY2BGR)
+
+  return Image.fromarray(processed_image)
+
 
 def preprocess_and_save_images(root_dir, output_dir, mtcnn):
   if not os.path.exists(output_dir):
@@ -35,4 +52,4 @@ if __name__ == '__main__':
   
   mtcnn = MTCNN(device=device)
   
-  preprocess_and_save_images('dataset/lfw_funneled', 'dataset/processed', mtcnn)
+  preprocess_and_save_images('../dataset/lfw_funneled', '../dataset/processed', mtcnn)
