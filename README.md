@@ -13,7 +13,7 @@ bash setup.sh
 
 **step two:** after doing the step one, then run the ``preprocess.py`` file, this file has extract the face in dataset and save to the path ``dataset/processed``
 ```bash
-python preprocess.py
+python tools/preprocess.py
 ```
 
 **setp three**: now you can train / predict the model by using the following command
